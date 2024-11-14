@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.LoginController">
+   <children>
+      <VBox alignment="CENTER_LEFT" layoutX="181.0" layoutY="99.0" prefHeight="201.0" prefWidth="170.0">
+         <children>
+            <Label text="Email" />
+            <TextField fx:id="emailTextField" />
+            <Separator prefHeight="19.0" prefWidth="170.0" visible="false" />
+            <Label text="Password" />
+            <PasswordField fx:id="passwordTextField" />
+            <Separator layoutX="10.0" layoutY="98.0" prefHeight="12.0" prefWidth="170.0" visible="false" />
+            <AnchorPane prefHeight="32.0" prefWidth="170.0">
+               <children>
+                  <Button layoutX="39.0" layoutY="3.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="26.0" prefWidth="92.0" text="Log In" />
+               </children>
+            </AnchorPane>
+            <Separator layoutX="10.0" layoutY="136.0" prefHeight="12.0" prefWidth="170.0" visible="false" />
+            <HBox prefHeight="25.0" prefWidth="170.0">
+               <children>
+                  <Label prefHeight="26.0" prefWidth="65.0" text="New here?" />
+                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="104.0" stylesheets="@../css/login.css" text="Create account" />
+               </children>
+            </HBox>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+   </children>
+</AnchorPane>
