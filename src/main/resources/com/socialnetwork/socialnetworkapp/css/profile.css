@@ -1,0 +1,113 @@
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the main container */
+.anchor-pane {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+/* Tabs at the top */
+.tab-pane .tab-header-area {
+    background-color: #2d88ff;
+    border-bottom: none;
+}
+
+.tab-pane .tab {
+    font-weight: bold;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px 5px 0 0;
+    background-color: #2d88ff;
+}
+
+.tab-pane .tab:hover {
+    background-color: #1c6ed7;
+}
+
+/* Profile section */
+.user-profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-profile h1 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+}
+
+.user-profile p {
+    font-size: 16px;
+    color: #666;
+    margin: 5px 0 15px;
+}
+
+/* Buttons */
+button {
+    background-color: #2d88ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #1c6ed7;
+}
+
+
+/* Friends list */
+.friends-list {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+}
+
+.friends-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.friends-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.friends-list li img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.friends-list li span {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Logout button */
+.logout-button {
+    background-color: #ff4d4d;
+}
+
+.logout-button:hover {
+    background-color: #e63939;
+}

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.controller.LoginController">
    <children>
       <VBox alignment="CENTER_LEFT" layoutX="181.0" layoutY="99.0" prefHeight="201.0" prefWidth="170.0">
          <children>
@@ -16,7 +16,7 @@
             <Separator layoutX="10.0" layoutY="98.0" prefHeight="12.0" prefWidth="170.0" visible="false" />
             <AnchorPane prefHeight="32.0" prefWidth="170.0">
                <children>
-                  <Button layoutX="39.0" layoutY="3.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="26.0" prefWidth="92.0" text="Log In" />
+                  <Button layoutX="39.0" layoutY="3.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="26.0" prefWidth="92.0" stylesheets="@../css/login.css" text="Log In" />
                </children>
             </AnchorPane>
             <Separator layoutX="10.0" layoutY="136.0" prefHeight="12.0" prefWidth="170.0" visible="false" />

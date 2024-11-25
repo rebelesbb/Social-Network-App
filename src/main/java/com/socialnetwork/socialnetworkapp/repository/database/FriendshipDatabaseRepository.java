@@ -25,7 +25,7 @@ public class FriendshipDatabaseRepository implements Repository<Tuple<Long, Long
         this.friendshipValidator = friendshipValidator;
     }
 
-    private Friendship createFreindshipFromResultSet(ResultSet resultSet){
+    private Friendship createFriendshipFromResultSet(ResultSet resultSet){
         try{
             Tuple<Long, Long> id = new Tuple<>(resultSet.getLong("user1"), resultSet.getLong("user2"));
             LocalDateTime dateTime = resultSet.getTimestamp("friendship_date").toLocalDateTime();
@@ -46,7 +46,7 @@ public class FriendshipDatabaseRepository implements Repository<Tuple<Long, Long
                     String.format("SELECT * FROM friendships WHERE user1 = %d AND user2 = %d", id.getFirst(), id.getSecond()))){
 
             if(resultSet.next()){
-                friendship = createFreindshipFromResultSet(resultSet);
+                friendship = createFriendshipFromResultSet(resultSet);
                 return Optional.ofNullable(friendship);
             }
         }
@@ -88,6 +88,7 @@ public class FriendshipDatabaseRepository implements Repository<Tuple<Long, Long
     @Override
     public Optional<Friendship> save(Friendship entity) {
         String sql = "INSERT INTO friendships (user1, user2, friendship_date) VALUES (?, ?, ?)";
+        friendshipValidator.validate(entity);
         try(Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement statement = connection.prepareStatement(sql)){
 

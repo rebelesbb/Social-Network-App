@@ -3,7 +3,7 @@ package com.socialnetwork.socialnetworkapp.repository.repository_exceptions;
 public class FriendshipAlreadyExistsException extends RuntimeException {
 
     public FriendshipAlreadyExistsException() {
-        super("The users are already friends.");
+        super("Users are already friends!");
     }
 
     public FriendshipAlreadyExistsException(String message) {

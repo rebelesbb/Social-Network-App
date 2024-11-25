@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.controller.SearchedUserProfileController">
+    <children>
+        <SplitPane dividerPositions="0.08584337349397592" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="599.0">
+                    <children>
+                        <HBox alignment="CENTER" layoutX="1.0" layoutY="-1.0" prefHeight="31.0" prefWidth="600.0">
+                            <children>
+                                <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Home" />
+                                <Button mnemonicParsing="false" onAction="#goToUserProfile" prefHeight="41.0" prefWidth="120.0" text="Profile" />
+                                <Button mnemonicParsing="false" onAction="#goToSearchMenu" prefHeight="41.0" prefWidth="120.0" text="Search" />
+                                <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" text="Chats" />
+                                <Button mnemonicParsing="false" onAction="#goToRequests" prefHeight="41.0" prefWidth="120.0" text="Requests" />
+                            </children>
+                        </HBox>
+                    </children></AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                    <children>
+                        <SplitPane dividerPositions="0.3852074966532797" prefHeight="362.0" prefWidth="599.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                    <children>
+                                        <VBox layoutX="11.0" layoutY="28.0" prefHeight="115.0" prefWidth="200.0">
+                                            <children>
+                                                <Label fx:id="nameTextField" prefHeight="80.0" prefWidth="206.0" text="FirstName LastName" wrapText="true">
+                                                    <font>
+                                                        <Font size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <Separator prefHeight="9.0" prefWidth="200.0" />
+                                    <Button mnemonicParsing="false" onAction="#handleAdd" prefHeight="26.0" prefWidth="106.0" text="Add Friend" />
+                                            </children>
+                                        </VBox>
+                                    </children></AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="172.0">
+                                    <children>
+                                        <ListView fx:id="friendsListView" layoutX="66.0" layoutY="45.0" prefHeight="290.0" prefWidth="227.0" />
+                                        <Label layoutX="67.0" layoutY="20.0" prefHeight="26.0" prefWidth="227.0" text="Friends">
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Label>
+                                    </children></AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>

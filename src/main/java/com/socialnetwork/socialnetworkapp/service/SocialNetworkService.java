@@ -1,36 +1,28 @@
 package com.socialnetwork.socialnetworkapp.service;
 
-import com.socialnetwork.socialnetworkapp.domain.Friendship;
-import com.socialnetwork.socialnetworkapp.domain.Tuple;
-import com.socialnetwork.socialnetworkapp.domain.User;
+import com.socialnetwork.socialnetworkapp.domain.*;
 import com.socialnetwork.socialnetworkapp.repository.DataManagerStructure;
 import com.socialnetwork.socialnetworkapp.repository.repository_exceptions.FriendshipAlreadyExistsException;
 import com.socialnetwork.socialnetworkapp.repository.repository_exceptions.InvalidDataProvidedException;
+import com.socialnetwork.socialnetworkapp.repository.repository_exceptions.RequestAlreadySentException;
 import com.socialnetwork.socialnetworkapp.repository.repository_exceptions.UserAlreadyExistsException;
+import com.socialnetwork.socialnetworkapp.utils.events.ObjectChangeEventType;
+import com.socialnetwork.socialnetworkapp.utils.events.ObjectChangeEvent;
+import com.socialnetwork.socialnetworkapp.utils.observer.Observable;
+import com.socialnetwork.socialnetworkapp.utils.observer.Observer;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-public class SocialNetworkService {
-    private DataManagerStructure dataManager;
+public class SocialNetworkService implements Observable<ObjectChangeEvent> {
+    private final DataManagerStructure dataManager;
+    private final List<Observer<ObjectChangeEvent>> observers = new ArrayList<>();
 
     public SocialNetworkService(DataManagerStructure dataManager){
         this.dataManager = dataManager;
     }
-
-    private final Function<Friendship, String> friendshipStringFunction = f -> {
-        Optional<User> u1 = dataManager.getUserRepository().findOne(f.getId().getFirst());
-        Optional<User> u2 = dataManager.getUserRepository().findOne(f.getId().getSecond());
-        if (u1.isPresent() && u2.isPresent()) {
-            return u1.get().getFirstName() + " " + u1.get().getLastName()
-                    + "(ID" + f.getId().getFirst() + ") - " +
-                    u2.get().getFirstName() + " " + u2.get().getLastName()
-                    + "(ID" + f.getId().getSecond() + ")";
-        }
-        return "";
-    };
 
     /**
      *
@@ -40,66 +32,33 @@ public class SocialNetworkService {
         return dataManager.getUserRepository().findAll();
     }
 
-    /**
-     * Each friendship is made into a string having the format friend1(ID1) - friends2(ID2)
-     * @return The list of frinedships, as strings
-     */
-    public Iterable<String> getPrintableFriendships(){
-        List<Friendship> friendships = new ArrayList<>();
+    public Iterable<User> getFriendsOfUser(User user){
+        List <User> friends = new ArrayList<>();
 
+        for(Friendship friendship : dataManager.getFriendshipRepository().findAll()){
 
+            if(friendship.getId().getFirst().equals(user.getId())){
+                Optional<User> friend = dataManager.getUserRepository().findOne(friendship.getId().getSecond());
+                friend.ifPresent(friends::add);
+            }
+            else if(friendship.getId().getSecond().equals(user.getId())){
+                Optional<User> friend = dataManager.getUserRepository().findOne(friendship.getId().getFirst());
+                friend.ifPresent(friends::add);
+            }
 
-        // method reference
-        dataManager.getFriendshipRepository().findAll().forEach(friendships::add);
+        }
 
-        return friendships.stream()
-                .map(friendshipStringFunction)
-                .collect(Collectors.toList());
+        return friends;
     }
 
 
     /**
-     * Adds a new user
-     * @param firstName the first name of the user
-     * @param lastName the last name of the user
-     * @param email the email of the user
-     * @param password the password of the user
-     * @throws UserAlreadyExistsException if there is a user with the same email
+     * Checks if there is any user with the given credentials: email and password
+     * @param email the email of the supposed user
+     * @param password the password of the supposed user
+     * @return optional - of user, if they exist
+     *                  - empty otherwise
      */
-    public void addUser(String firstName, String lastName, String email, String password){
-        User newUser = new User(firstName, lastName, email, password);
-
-        Optional<User> u = dataManager.getUserRepository().save(newUser);
-        if(u.isPresent()){
-            throw new UserAlreadyExistsException();
-        }
-    }
-
-    /**
-     * Deletes a user (and the friendships related to them)
-     * @param userId the id of the user
-     * @throws InvalidDataProvidedException if the id does not exist
-     */
-    public void deleteUser(Long userId){
-        Optional<User> deletedUser = dataManager.getUserRepository().findOne(userId);
-
-        if(deletedUser.isPresent()) {
-            List<Friendship> friendsToDelete = new ArrayList<>();
-
-            dataManager.getFriendshipRepository().findAll().forEach(f -> {
-                Tuple<Long, Long> friends = f.getId();
-                if (friends.getFirst().equals(userId) || friends.getSecond().equals(userId))
-                    friendsToDelete.add(f);
-            });
-
-            friendsToDelete.forEach(f -> dataManager.getFriendshipRepository().delete(f.getId()));
-            dataManager.getUserRepository().delete(userId);
-        }
-        else{
-            throw new InvalidDataProvidedException();
-        }
-    }
-
     public Optional<User> getUserByCredentials(String email, String password){
         for(User user : dataManager.getUserRepository().findAll()){
             if(user.getEmail().equals(email) && user.getPassword().equals(password)){
@@ -108,6 +67,50 @@ public class SocialNetworkService {
         }
         return Optional.empty();
     }
+
+    /**
+     * Finds all users whose first name or last name start with a specified string
+     * @param name the given string, that needs to be contained by either the first of last name, at the beginning
+     * @return a list of user whose first name or last name start with a specified string
+     */
+    public List<User> getUsersByName(String name){
+        return StreamSupport.stream(dataManager.getUserRepository().findAll().spliterator(), false)
+                .filter(user -> (user.getFirstName().toLowerCase().startsWith(name.toLowerCase()) ||
+                                user.getLastName().toLowerCase().startsWith(name.toLowerCase())))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the requests of a user
+     * @param user the user whose requests we want to get
+     * @return the friend request of the given user
+     */
+    public List<Request> getRequestsOfUser(User user){
+        return StreamSupport.stream(dataManager.getRequestRepository().findAll().spliterator(), false)
+                .filter(request -> Objects.equals(request.getId().getSecond(), user.getId()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Finds a request based on id
+     * @param senderId the id of the person who sent the request
+     * @param receiverId the id of the person who received the request
+     * @return the friend request object with the id (senderId, receiverId)
+     */
+    public Optional<Request> getRequestById(Long senderId, Long receiverId){
+        return dataManager.getRequestRepository().findOne(new Tuple<>(senderId, receiverId));
+    }
+
+    /**
+     * Finds a user based on their id
+     * @param id the id of the user to be found
+     * @return the user found with the given id
+     */
+    public Optional<User> getUserById(Long id){
+        return dataManager.getUserRepository().findOne(id);
+    }
+
+    //-----------------------------------------------------------------------------
 
     /**
      * Creates a friendship between two users
@@ -130,6 +133,74 @@ public class SocialNetworkService {
         if(f.isPresent()){
             throw new FriendshipAlreadyExistsException();
         }
+        else notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.ACCEPT, newFriendship));
+    }
+
+
+    /**
+     * Adds a new user
+     * @param firstName the first name of the user
+     * @param lastName the last name of the user
+     * @param email the email of the user
+     * @param password the password of the user
+     * @throws UserAlreadyExistsException if there is a user with the same email
+     */
+    public void addUser(String firstName, String lastName, String email, String password){
+        User newUser = new User(firstName, lastName, email, password);
+
+        Optional<User> u = dataManager.getUserRepository().save(newUser);
+        if(u.isPresent()){
+            throw new UserAlreadyExistsException();
+        }else {
+            notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.ADD, newUser));
+        }
+    }
+
+    /**
+     * Deletes a user (and the friendships related to them)
+     * @param userId the id of the user
+     * @throws InvalidDataProvidedException if the id does not exist
+     */
+    public void deleteUser(Long userId){
+        Optional<User> toDeleteUser = dataManager.getUserRepository().findOne(userId);
+
+        if(toDeleteUser.isPresent()) {
+            List<Friendship> friendsToDelete = new ArrayList<>();
+
+            dataManager.getFriendshipRepository().findAll().forEach(f -> {
+                Tuple<Long, Long> friends = f.getId();
+                if (friends.getFirst().equals(userId) || friends.getSecond().equals(userId))
+                    friendsToDelete.add(f);
+            });
+
+            friendsToDelete.forEach(f -> dataManager.getFriendshipRepository().delete(f.getId()));
+            dataManager.getUserRepository().delete(userId);
+            notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.REMOVE, toDeleteUser.get()));
+        }
+        else{
+            throw new InvalidDataProvidedException();
+        }
+    }
+
+    /**
+     * Creates a friend request
+     * @param userId the id of the user who sent the request
+     * @param newFriendId the id of the user receiving the request
+     */
+    public void addFriendRequest(Long userId, Long newFriendId){
+        if(dataManager.getUserRepository().findOne(userId).isEmpty()
+                || dataManager.getUserRepository().findOne(newFriendId).isEmpty()){
+            throw new InvalidDataProvidedException();
+        }
+
+        Request newRequest = new Request(userId, newFriendId, LocalDateTime.now());
+
+        Optional<Request> r = dataManager.getRequestRepository().save(newRequest);
+
+        if(r.isPresent()){
+            throw new RequestAlreadySentException();
+        }
+        else notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.REQUEST, newRequest));
     }
 
     /**
@@ -145,6 +216,41 @@ public class SocialNetworkService {
         if(f.isEmpty()){
             throw new InvalidDataProvidedException();
         }
+        else {
+            notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.REMOVE, f.get()));
+        }
+    }
+
+    /**
+     * Updates the data of a user
+     * @param userId the id of the user
+     * @param newFirstName the new first name
+     * @param newLastName the new last name
+     * @param newEmail the new email
+     * @param newPassword the new password
+     */
+    public void updateUser(Long userId, String newFirstName, String newLastName, String newEmail, String newPassword){
+        User newUser = new User(newFirstName, newLastName, newEmail, newPassword);
+        newUser.setId(userId);
+        Optional<User> oldUser = dataManager.getUserRepository().findOne(userId);
+        if(oldUser.isPresent()){
+            Optional<User> updatedUser = dataManager.getUserRepository().update(newUser);
+            if(updatedUser.isEmpty()){
+                notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.UPDATE, newUser));
+            }
+        }
+    }
+
+    public void updateRequest(Long senderId, Long receiverId, Status status, LocalDateTime date){
+        Optional<Request> oldRequest = dataManager.getRequestRepository().findOne(new Tuple<>(senderId, receiverId));
+        if(oldRequest.isPresent()) {
+            Request newRequest = new Request(senderId, receiverId, status, date);
+            Optional<Request> r = dataManager.getRequestRepository().update(newRequest);
+            if (r.isEmpty()) {
+                notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.ACCEPT, null, null));
+            }
+        }
+
     }
 
     /**
@@ -235,6 +341,22 @@ public class SocialNetworkService {
         return communityUsers;
     }
 
+
+
+    @Override
+    public void addObserver(Observer<ObjectChangeEvent> observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer<ObjectChangeEvent> observer) {
+        //obserbers.remove(observer)
+    }
+
+    @Override
+    public void notifyObservers(ObjectChangeEvent event) {
+        observers.forEach(observer -> observer.update(event));
+    }
 
 
 }

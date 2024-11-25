@@ -3,7 +3,7 @@ package com.socialnetwork.socialnetworkapp.repository.repository_exceptions;
 public class UserAlreadyExistsException extends RuntimeException {
 
     public UserAlreadyExistsException() {
-      super("User already exists.");
+      super("User already exists!");
     }
 
     public UserAlreadyExistsException(String message) {

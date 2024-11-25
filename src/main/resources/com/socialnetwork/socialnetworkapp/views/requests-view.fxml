@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/notifications.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.controller.RequestsController">
+    <children>
+        <SplitPane dividerPositions="0.08584337349397592" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="599.0">
+                    <children>
+                        <HBox alignment="CENTER" layoutX="1.0" layoutY="-1.0" prefHeight="31.0" prefWidth="600.0">
+                            <children>
+                                <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Home" />
+                                <Button mnemonicParsing="false" onAction="#goToUserProfile" prefHeight="41.0" prefWidth="120.0" text="Profile" />
+                                <Button mnemonicParsing="false" onAction="#goToSearchMenu" prefHeight="41.0" prefWidth="120.0" text="Search" />
+                                <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" text="Chats" />
+                                <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Requests" />
+                            </children>
+                        </HBox>
+                    </children></AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <Label layoutX="54.0" layoutY="61.0" text="Requests">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="requestTableView" layoutX="54.0" layoutY="81.0" prefHeight="200.0" prefWidth="500.0">
+                    <columns>
+                      <TableColumn fx:id="nameColumn" prefWidth="250.0" text="Name" />
+                        <TableColumn fx:id="timeColumn" prefWidth="125.0" text="Time" />
+                      <TableColumn fx:id="actionColumn" prefWidth="125.0" text="Action" />
+                    </columns>
+                  </TableView>
+               </children></AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+
+</AnchorPane>

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.UserProfileController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.controller.UserProfileController">
    <children>
       <SplitPane dividerPositions="0.08584337349397592" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0">
         <items>
@@ -13,10 +13,10 @@
                   <HBox alignment="CENTER" layoutX="1.0" layoutY="-1.0" prefHeight="31.0" prefWidth="600.0">
                      <children>
                         <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Home" />
-                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Button" />
-                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Notifications" />
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Profile" />
+                        <Button mnemonicParsing="false" onAction="#goToSearchMenu" prefHeight="41.0" prefWidth="120.0" text="Search" />
                         <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" text="Chats" />
-                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Log Out" />
+                        <Button mnemonicParsing="false" onAction="#goToRequests" prefHeight="41.0" prefWidth="120.0" text="Requests" />
                      </children>
                   </HBox>
                </children></AnchorPane>
@@ -38,10 +38,11 @@
                                  </children>
                               </VBox>
                               <Button layoutX="11.0" layoutY="194.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="131.0" text="Edit Profile" />
+                              <Button layoutX="14.0" layoutY="314.0" mnemonicParsing="false" onAction="#handleLogout" text="Log Out" />
                            </children></AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="172.0">
                            <children>
-                              <ListView layoutX="66.0" layoutY="45.0" prefHeight="290.0" prefWidth="227.0" />
+                              <ListView fx:id="friendsListView" layoutX="66.0" layoutY="45.0" prefHeight="290.0" prefWidth="227.0" />
                               <Label layoutX="67.0" layoutY="20.0" prefHeight="26.0" prefWidth="227.0" text="Friends">
                                  <font>
                                     <Font name="System Bold" size="12.0" />

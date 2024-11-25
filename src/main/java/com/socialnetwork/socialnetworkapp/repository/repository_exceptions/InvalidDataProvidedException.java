@@ -2,7 +2,7 @@ package com.socialnetwork.socialnetworkapp.repository.repository_exceptions;
 
 public class InvalidDataProvidedException extends RuntimeException {
     public InvalidDataProvidedException() {
-      super("Invalid data provided");
+      super("Invalid data provided!");
     }
 
     public InvalidDataProvidedException(String message) {
