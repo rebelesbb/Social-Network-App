@@ -15,8 +15,8 @@
                                 <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Home" />
                                 <Button mnemonicParsing="false" onAction="#goToUserProfile" prefHeight="41.0" prefWidth="120.0" text="Profile" />
                                 <Button mnemonicParsing="false" onAction="#goToSearchMenu" prefHeight="41.0" prefWidth="120.0" text="Search" />
-                                <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" text="Chats" />
-                                <Button fx:id="notificationsButton" mnemonicParsing="false" onAction="#goToRequests" prefHeight="41.0" prefWidth="120.0" text="Requests" />
+                                <Button mnemonicParsing="false" onAction="#goToChats" prefHeight="38.0" prefWidth="120.0" text="Chats" />
+                                <Button fx:id="requestsButton" mnemonicParsing="false" onAction="#goToRequests" prefHeight="41.0" prefWidth="120.0" text="Requests" />
                             </children>
                         </HBox>
                     </children></AnchorPane>
@@ -34,7 +34,7 @@
                                                     </font>
                                                 </Label>
                                                 <Separator prefHeight="9.0" prefWidth="200.0" />
-                                                <Button mnemonicParsing="false" onAction="#handleRemove" prefHeight="26.0" prefWidth="106.0" text="Remove Friend" />
+                                                <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handleRemove" prefHeight="26.0" prefWidth="106.0" text="Remove Friend" />
                                             </children>
                                         </VBox>
                                     </children></AnchorPane>

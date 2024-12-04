@@ -51,8 +51,11 @@ public class LoginController {
         Stage stage = (Stage) emailTextField.getScene().getWindow();
         stage.setScene(scene);
 
+        MenuBarController menuBarController = new MenuBarController();
+        menuBarController.setStageServiceUser(stage, user, service);
+
         UserProfileController controller = loader.getController();
-        controller.setService(service, user);
+        controller.setService(service, user, menuBarController);
 
         stage.show();
     }

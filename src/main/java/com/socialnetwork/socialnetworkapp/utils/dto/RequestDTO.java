@@ -1,8 +1,8 @@
-package com.socialnetwork.socialnetworkapp.utils.objects;
+package com.socialnetwork.socialnetworkapp.utils.dto;
 
 public class RequestDTO {
-    private String name, date, status;
-    private Long senderID, receiverID;
+    private final String name, date, status;
+    private final Long senderID, receiverID;
 
     public RequestDTO(String name, Long senderID, Long receiverID, String date, String status) {
         this.name = name;

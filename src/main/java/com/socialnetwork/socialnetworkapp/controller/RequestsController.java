@@ -6,7 +6,7 @@ import com.socialnetwork.socialnetworkapp.domain.Tuple;
 import com.socialnetwork.socialnetworkapp.domain.User;
 import com.socialnetwork.socialnetworkapp.service.SocialNetworkService;
 import com.socialnetwork.socialnetworkapp.utils.events.ObjectChangeEvent;
-import com.socialnetwork.socialnetworkapp.utils.objects.RequestDTO;
+import com.socialnetwork.socialnetworkapp.utils.dto.RequestDTO;
 import com.socialnetwork.socialnetworkapp.utils.observer.Observer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +17,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,20 +35,26 @@ public class RequestsController implements Observer<ObjectChangeEvent> {
     @FXML
     private TableColumn<RequestDTO, String> timeColumn;
     @FXML
-    private TableColumn<RequestDTO, String> statusColumn;
-    @FXML
     private TableColumn<RequestDTO, Void> actionColumn;
+    @FXML
+    private Button requestsButton;
 
     MenuBarController menuBarController;
     SocialNetworkService service;
     User user;
 
-    public void setService(SocialNetworkService service, User user) {
+    public void setService(SocialNetworkService service, User user, MenuBarController menuBarController) {
         this.service = service;
         this.user = user;
+        this.menuBarController = menuBarController;
+
         service.addObserver(this);
-        menuBarController = new MenuBarController();
-        menuBarController.setStageServiceUser((Stage) requestTableView.getScene().getWindow(), user, service);
+
+        int notificationsCount = menuBarController.getNotificationsCount();
+        if(notificationsCount > 0)
+            requestsButton.setText("Requests" + "(" + menuBarController.getNotificationsCount() + ")");
+        else requestsButton.setText("Requests");
+
         initModel();
     }
 
@@ -64,8 +69,6 @@ public class RequestsController implements Observer<ObjectChangeEvent> {
     public void initialize() {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-
         actionColumn.setCellFactory(column -> new TableCell<RequestDTO, Void>() {
                     private final Button acceptButton = new Button("Accept");
                     private final Button declineButton = new Button("Decline");
@@ -73,15 +76,31 @@ public class RequestsController implements Observer<ObjectChangeEvent> {
                         // Accept button action
                         acceptButton.setOnAction(event -> {
                             RequestDTO request = getTableView().getItems().get(getIndex());
+
                             handleAccept(request);
+
                             getTableView().getItems().remove(getIndex());
+                            menuBarController.setNotificationsCount(menuBarController.getNotificationsCount() - 1);
+
+                            int notificationsCount = menuBarController.getNotificationsCount();
+                            if(notificationsCount > 0)
+                                requestsButton.setText("Requests" + "(" + menuBarController.getNotificationsCount() + ")");
+                            else requestsButton.setText("Requests");
                         });
 
                         // Decline button action
                         declineButton.setOnAction(event -> {
                             RequestDTO request = getTableView().getItems().get(getIndex());
+
                             handleDecline(request);
+
                             getTableView().getItems().remove(getIndex());
+                            menuBarController.setNotificationsCount(menuBarController.getNotificationsCount() - 1);
+
+                            int notificationsCount = menuBarController.getNotificationsCount();
+                            if(notificationsCount > 0)
+                                requestsButton.setText("Requests" + "(" + menuBarController.getNotificationsCount() + ")");
+                            else requestsButton.setText("Requests");
                         });
                     }
 
@@ -114,15 +133,17 @@ public class RequestsController implements Observer<ObjectChangeEvent> {
             Request rec = r.get();
             service.updateRequest(rec.getId().getFirst(), rec.getId().getSecond(), Status.ACCEPTED,
                     rec.getTimeSent());
-            model.clear();
-            initModel();
         }
     }
 
     public void handleDecline(RequestDTO request) {
         Optional<Request> r = service.getRequestById(request.getSenderID(), request.getReceiverID());
         r.ifPresent(value -> value.setStatus(Status.DECLINED));
-        initModel();
+        if(r.isPresent()) {
+            Request rec = r.get();
+            service.updateRequest(rec.getId().getFirst(), rec.getId().getSecond(), Status.DECLINED,
+                    rec.getTimeSent());
+        }
     }
 
     public List<RequestDTO> getRequestsDTO() {
@@ -146,5 +167,9 @@ public class RequestsController implements Observer<ObjectChangeEvent> {
 
     public void goToSearchMenu() throws IOException {
         menuBarController.goToSearchMenu();
+    }
+
+    public void goToChats() throws IOException{
+        menuBarController.goToChats();
     }
 }

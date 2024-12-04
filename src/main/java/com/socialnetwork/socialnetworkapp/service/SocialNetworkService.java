@@ -87,7 +87,8 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
      */
     public List<Request> getRequestsOfUser(User user){
         return StreamSupport.stream(dataManager.getRequestRepository().findAll().spliterator(), false)
-                .filter(request -> Objects.equals(request.getId().getSecond(), user.getId()))
+                .filter(request -> Objects.equals(request.getId().getSecond(), user.getId())
+                        && Objects.equals(request.getStatus(), Status.PENDING))
                 .collect(Collectors.toList());
     }
 
@@ -108,6 +109,16 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
      */
     public Optional<User> getUserById(Long id){
         return dataManager.getUserRepository().findOne(id);
+    }
+
+    public Integer getRequestsCount(User user){
+        return getRequestsOfUser(user).stream()
+                .filter(request -> request.getStatus() == Status.PENDING)
+                .toList().size();
+    }
+
+    public boolean isFriendOfUser(User user, User selectedUser) {
+        return dataManager.getFriendshipRepository().findOne(new Tuple<>(user.getId(), selectedUser.getId())).isPresent();
     }
 
     //-----------------------------------------------------------------------------
@@ -246,12 +257,16 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
         if(oldRequest.isPresent()) {
             Request newRequest = new Request(senderId, receiverId, status, date);
             Optional<Request> r = dataManager.getRequestRepository().update(newRequest);
-            if (r.isEmpty()) {
-                notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.ACCEPT, null, null));
-            }
         }
 
     }
+
+    public void addMessage(Long from_uid, Long to_uid, LocalDateTime date, String text){
+        Message message = new Message(from_uid, to_uid, date, text);
+        dataManager.getMessagesRepository().save(message);
+        notifyObservers(new ObjectChangeEvent(ObjectChangeEventType.MESSAGE_SENT, message));
+    }
+
 
     /**
      * Applies the depth first search starting from a given memeber of a community
@@ -356,6 +371,14 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
     @Override
     public void notifyObservers(ObjectChangeEvent event) {
         observers.forEach(observer -> observer.update(event));
+    }
+
+
+    public List<Message> getMessagesOfUsers(Long user, Long friendOfUser) {
+        return StreamSupport.stream(dataManager.getMessagesRepository().findAll().spliterator(), false)
+                .filter(message -> (Objects.equals(message.getSentFrom(), user) && Objects.equals(message.getSentTo(), friendOfUser))
+                || (Objects.equals(message.getSentFrom(), friendOfUser) && Objects.equals(message.getSentTo(), user)))
+                .toList();
     }
 
 

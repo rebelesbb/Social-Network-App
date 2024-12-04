@@ -3,10 +3,10 @@ package com.socialnetwork.socialnetworkapp.domain;
 import java.util.Objects;
 
 public class User extends Entity<Long>{
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String password;
 
     public User(String firstName, String lastName, String email, String password){
         this.firstName = firstName;

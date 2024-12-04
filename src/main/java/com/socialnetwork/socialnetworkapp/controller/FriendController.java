@@ -7,6 +7,7 @@ import com.socialnetwork.socialnetworkapp.utils.observer.Observer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -20,9 +21,12 @@ import java.util.stream.StreamSupport;
 public class FriendController implements Observer<ObjectChangeEvent> {
     @FXML
     private Label nameTextField;
-
     @FXML
     private ListView<User> friendsListView;
+    @FXML
+    private Button removeButton;
+    @FXML
+    private Button requestsButton;
 
 
     private MenuBarController menuBarController;
@@ -33,13 +37,19 @@ public class FriendController implements Observer<ObjectChangeEvent> {
     private User selectedUser;
     private SocialNetworkService service;
 
-    public void setService(SocialNetworkService service, User user, User selectedUser) {
+    public void setService(SocialNetworkService service, User user, User selectedUser, MenuBarController menuBarController) {
         this.service = service;
         this.user = user;
         this.selectedUser = selectedUser;
+        this.menuBarController = menuBarController;
+
         service.addObserver(this);
-        menuBarController = new MenuBarController();
-        menuBarController.setStageServiceUser((Stage) friendsListView.getScene().getWindow(), user, service);
+
+        int notifsCount = menuBarController.getNotificationsCount();
+        if(notifsCount > 0)
+            requestsButton.setText("Requests" + "(" + menuBarController.getNotificationsCount() + ")");
+        else requestsButton.setText("Requests");
+
         initModel();
     }
 
@@ -73,6 +83,7 @@ public class FriendController implements Observer<ObjectChangeEvent> {
 
     public void handleRemove(){
         service.removeFriend(user.getId(), selectedUser.getId());
+        removeButton.setDisable(true);
         model.clear();
         initModel();
     }
@@ -87,6 +98,10 @@ public class FriendController implements Observer<ObjectChangeEvent> {
 
     public void goToRequests() throws IOException{
         menuBarController.goToRequests();
+    }
+
+    public void goToChats() throws IOException{
+        menuBarController.goToChats();
     }
 
     @Override

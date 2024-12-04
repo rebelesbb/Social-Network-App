@@ -12,7 +12,8 @@ module com.socialnetwork.socialnetworkapp {
     exports com.socialnetwork.socialnetworkapp.domain;
     exports com.socialnetwork.socialnetworkapp.utils.events;
     exports com.socialnetwork.socialnetworkapp.utils.observer;
-    exports com.socialnetwork.socialnetworkapp.utils.objects;
+    exports com.socialnetwork.socialnetworkapp.utils.dto;
     exports com.socialnetwork.socialnetworkapp.repository;
+    exports com.socialnetwork.socialnetworkapp.utils.paging;
     opens com.socialnetwork.socialnetworkapp.controller to javafx.fxml;
 }

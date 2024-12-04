@@ -8,10 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,9 +21,11 @@ import java.util.stream.StreamSupport;
 public class SearchedUserProfileController implements Observer<ObjectChangeEvent> {
     @FXML
     private Label nameTextField;
-
     @FXML
     private ListView<User> friendsListView;
+    @FXML
+    private Button requestsButton;
+
 
     private MenuBarController menuBarController;
     ObservableList<User> model = FXCollections.observableArrayList();
@@ -33,13 +35,19 @@ public class SearchedUserProfileController implements Observer<ObjectChangeEvent
     private User foundUser;
     private SocialNetworkService service;
 
-    public void setService(SocialNetworkService service, User user, User foundUser) {
+    public void setService(SocialNetworkService service, User user, User foundUser, MenuBarController menuBarController) {
         this.service = service;
         this.user = user;
         this.foundUser = foundUser;
+        this.menuBarController = menuBarController;
+
         service.addObserver(this);
-        menuBarController = new MenuBarController();
-        menuBarController.setStageServiceUser((Stage) friendsListView.getScene().getWindow(), user, service);
+
+        int notificationsCount = menuBarController.getNotificationsCount();
+        if(notificationsCount > 0)
+            requestsButton.setText("Requests" + "(" + menuBarController.getNotificationsCount() + ")");
+        else requestsButton.setText("Requests");
+
         initModel();
     }
 
@@ -95,6 +103,10 @@ public class SearchedUserProfileController implements Observer<ObjectChangeEvent
 
     public void goToRequests() throws IOException {
         menuBarController.goToRequests();
+    }
+
+    public void goToChats() throws IOException{
+        menuBarController.goToChats();
     }
 
     public void handleUpdate(ActionEvent event){

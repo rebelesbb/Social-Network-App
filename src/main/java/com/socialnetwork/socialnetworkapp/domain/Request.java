@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Request extends Entity<Tuple<Long, Long>> {
     private Status status;
-    private LocalDateTime timeSent;
+    private final LocalDateTime timeSent;
 
     public Request(Long senderId, Long receiverId, LocalDateTime timeSent) {
         setId(new Tuple<>(senderId, receiverId));

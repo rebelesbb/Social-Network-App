@@ -43,7 +43,7 @@ public class FriendshipDatabaseRepository implements Repository<Tuple<Long, Long
         Friendship friendship;
         try(Connection connection = DriverManager.getConnection(url, username, password);
             ResultSet resultSet = connection.createStatement().executeQuery(
-                    String.format("SELECT * FROM friendships WHERE user1 = %d AND user2 = %d", id.getFirst(), id.getSecond()))){
+                    String.format("SELECT * FROM friendships WHERE user1 = %d AND user2 = %d OR user1 = %d AND user2 = %d", id.getFirst(), id.getSecond(), id.getSecond(), id.getFirst()))){
 
             if(resultSet.next()){
                 friendship = createFriendshipFromResultSet(resultSet);

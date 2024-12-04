@@ -6,7 +6,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.controller.LoginController">
    <children>
-      <VBox alignment="CENTER_LEFT" layoutX="181.0" layoutY="99.0" prefHeight="201.0" prefWidth="170.0">
+      <VBox alignment="CENTER_LEFT" layoutX="215.0" layoutY="99.0" prefHeight="201.0" prefWidth="170.0">
          <children>
             <Label text="Email" />
             <TextField fx:id="emailTextField" />

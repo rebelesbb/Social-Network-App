@@ -1,19 +1,19 @@
 package com.socialnetwork.socialnetworkapp.repository;
 
-import com.socialnetwork.socialnetworkapp.domain.Friendship;
-import com.socialnetwork.socialnetworkapp.domain.Request;
-import com.socialnetwork.socialnetworkapp.domain.Tuple;
-import com.socialnetwork.socialnetworkapp.domain.User;
+import com.socialnetwork.socialnetworkapp.domain.*;
 
 public class DataManagerStructure {
     private final Repository<Long, User> userRepository;
     private final Repository<Tuple<Long, Long>, Friendship> friendshipRepository;
     private final Repository<Tuple<Long, Long>, Request> requestRepository;
+    private final Repository<Long, Message> messageRepository;
 
-    public DataManagerStructure(Repository<Long, User> usersRepo, Repository<Tuple<Long,Long>, Friendship> friendshipRepo, Repository<Tuple<Long, Long>, Request> requestRepo) {
+    public DataManagerStructure(Repository<Long, User> usersRepo, Repository<Tuple<Long,Long>, Friendship> friendshipRepo,
+                                Repository<Tuple<Long, Long>, Request> requestRepo, Repository<Long, Message> messageRepo) {
         this.userRepository = usersRepo;
         this.friendshipRepository = friendshipRepo;
         this.requestRepository = requestRepo;
+        this.messageRepository = messageRepo;
     }
 
     /**
@@ -38,5 +38,13 @@ public class DataManagerStructure {
      */
     public Repository<Tuple<Long, Long>, Request> getRequestRepository(){
         return this.requestRepository;
+    }
+
+    /**
+     *
+     * @return the repository of messages
+     */
+    public Repository<Long, Message> getMessagesRepository(){
+        return this.messageRepository;
     }
 }

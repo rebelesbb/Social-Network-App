@@ -15,8 +15,8 @@
                                 <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Home" />
                                 <Button mnemonicParsing="false" onAction="#goToUserProfile" prefHeight="41.0" prefWidth="120.0" text="Profile" />
                                 <Button mnemonicParsing="false" onAction="#goToSearchMenu" prefHeight="41.0" prefWidth="120.0" text="Search" />
-                                <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" text="Chats" />
-                                <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Requests" />
+                                <Button mnemonicParsing="false" onAction="#goToChats" prefHeight="38.0" prefWidth="120.0" text="Chats" />
+                                <Button fx:id="requestsButton" mnemonicParsing="false" prefHeight="41.0" prefWidth="120.0" text="Requests" />
                             </children>
                         </HBox>
                     </children></AnchorPane>

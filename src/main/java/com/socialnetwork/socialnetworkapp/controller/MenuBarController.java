@@ -13,11 +13,24 @@ public class MenuBarController {
     private Stage stage;
     private User user;
     private SocialNetworkService service;
+    private int notificationsCount = 0;
 
     public void setStageServiceUser(Stage stage, User user, SocialNetworkService service) {
         this.stage = stage;
         this.user = user;
         this.service = service;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setNotificationsCount(int notificationsCount) {
+        this.notificationsCount = notificationsCount;
+    }
+
+    public int getNotificationsCount() {
+        return notificationsCount;
     }
 
     public void goToSearchMenu() throws IOException {
@@ -28,7 +41,7 @@ public class MenuBarController {
         this.stage.setScene(scene);
 
         SearchController controller = fxmlLoader.getController();
-        controller.setService(service, user);
+        controller.setService(service, user, this);
 
         stage.show();
     }
@@ -41,7 +54,7 @@ public class MenuBarController {
         this.stage.setScene(scene);
 
         UserProfileController controller = fxmlLoader.getController();
-        controller.setService(service, user);
+        controller.setService(service, user, this);
 
         stage.show();
     }
@@ -54,7 +67,7 @@ public class MenuBarController {
         this.stage.setScene(scene);
 
         RequestsController controller = fxmlLoader.getController();
-        controller.setService(service, user);
+        controller.setService(service, user, this);
 
         stage.show();
     }
@@ -68,6 +81,19 @@ public class MenuBarController {
 
         LoginController controller = fxmlLoader.getController();
         controller.setService(service);
+
+        stage.show();
+    }
+
+    public void goToChats() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/socialnetwork/socialnetworkapp/views/chat-view.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Scene scene = new Scene(root);
+        this.stage.setScene(scene);
+
+        ChatController controller = fxmlLoader.getController();
+        controller.setService(service, user, this);
 
         stage.show();
     }
