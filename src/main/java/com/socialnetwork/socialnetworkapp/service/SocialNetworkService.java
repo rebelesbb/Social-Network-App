@@ -1,16 +1,22 @@
 package com.socialnetwork.socialnetworkapp.service;
 
 import com.socialnetwork.socialnetworkapp.domain.*;
+import com.socialnetwork.socialnetworkapp.domain.validators.ValidationException;
 import com.socialnetwork.socialnetworkapp.repository.DataManagerStructure;
 import com.socialnetwork.socialnetworkapp.repository.repository_exceptions.FriendshipAlreadyExistsException;
 import com.socialnetwork.socialnetworkapp.repository.repository_exceptions.InvalidDataProvidedException;
 import com.socialnetwork.socialnetworkapp.repository.repository_exceptions.RequestAlreadySentException;
 import com.socialnetwork.socialnetworkapp.repository.repository_exceptions.UserAlreadyExistsException;
+import com.socialnetwork.socialnetworkapp.utils.dto.FriendshipFilterDTO;
 import com.socialnetwork.socialnetworkapp.utils.events.ObjectChangeEventType;
 import com.socialnetwork.socialnetworkapp.utils.events.ObjectChangeEvent;
 import com.socialnetwork.socialnetworkapp.utils.observer.Observable;
 import com.socialnetwork.socialnetworkapp.utils.observer.Observer;
+import com.socialnetwork.socialnetworkapp.utils.paging.Page;
+import com.socialnetwork.socialnetworkapp.utils.paging.Pageable;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,6 +38,11 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
         return dataManager.getUserRepository().findAll();
     }
 
+    /**
+     * Finds oll friends of a given user
+     * @param user the given user
+     * @return the list of friends  of the user
+     */
     public Iterable<User> getFriendsOfUser(User user){
         List <User> friends = new ArrayList<>();
 
@@ -111,12 +122,23 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
         return dataManager.getUserRepository().findOne(id);
     }
 
+    /**
+     * Computes the number of friend requests of a given user
+     * @param user: the given user
+     * @return the number of friend requests
+     */
     public Integer getRequestsCount(User user){
         return getRequestsOfUser(user).stream()
                 .filter(request -> request.getStatus() == Status.PENDING)
                 .toList().size();
     }
 
+    /**
+     * Checks if a user is friend with another user
+     * @param user one of the users
+     * @param selectedUser one of the ussers
+     * @return true - if the two users are friends, false - otherwise
+     */
     public boolean isFriendOfUser(User user, User selectedUser) {
         return dataManager.getFriendshipRepository().findOne(new Tuple<>(user.getId(), selectedUser.getId())).isPresent();
     }
@@ -155,6 +177,7 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
      * @param email the email of the user
      * @param password the password of the user
      * @throws UserAlreadyExistsException if there is a user with the same email
+     * @throws ValidationException if any of the given data isn't valid
      */
     public void addUser(String firstName, String lastName, String email, String password){
         User newUser = new User(firstName, lastName, email, password);
@@ -261,6 +284,13 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
 
     }
 
+    /**
+     * Adds a Message
+     * @param from_uid: the id of the user sending the message
+     * @param to_uid: the id of the user receiving the message
+     * @param date: the date when the message was sent
+     * @param text: the text of the message
+     */
     public void addMessage(Long from_uid, Long to_uid, LocalDateTime date, String text){
         Message message = new Message(from_uid, to_uid, date, text);
         dataManager.getMessagesRepository().save(message);
@@ -329,8 +359,6 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
         return new Tuple<>(communitiesCount, biggestCommunity);
     }
 
-
-
     /**
      * Computes the number of communities
      * @return the number of communities
@@ -343,7 +371,6 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
      * Finds the most sociable community
      * @return the community with the most members
      */
-
     public List<User> biggestCommunity(){
         List<User> communityUsers = new ArrayList<>();
         List<Long> usersId = getCommunitiesData().getSecond();
@@ -356,7 +383,7 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
         return communityUsers;
     }
 
-
+    //----------------------------------------- OBSERVER ---------------------------------------------
 
     @Override
     public void addObserver(Observer<ObjectChangeEvent> observer) {
@@ -381,5 +408,18 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
                 .toList();
     }
 
+    //----------------------------------------- PAGING ---------------------------------------------
+    public Page<Friendship> findAllOnPage(Pageable pageable, FriendshipFilterDTO filter){
+        return dataManager.getFriendshipRepository().findAllOnPage(pageable, filter);
+    }
 
+    public String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

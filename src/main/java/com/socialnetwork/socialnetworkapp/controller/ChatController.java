@@ -145,7 +145,6 @@ public class ChatController implements Observer<ObjectChangeEvent> {
 
     @Override
     public void update(ObjectChangeEvent event) {
-        // to-do: Automatically Scroll to Bottom When New Items are Added
         switch (event.getType()){
             case MESSAGE_SENT -> {
                 Message message = (Message) event.getData();

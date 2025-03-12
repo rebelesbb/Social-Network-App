@@ -29,7 +29,9 @@ public class LoginController {
     public void handleLogin(){
 
         String emailText = emailTextField.getText();
-        String passwordText = passwordTextField.getText();
+        String passwordText = service.hashPassword(passwordTextField.getText());
+
+        System.out.println(emailText + " " + passwordText);
 
         Optional<User> user = service.getUserByCredentials(emailText, passwordText);
         if (user.isPresent()) {
@@ -42,6 +44,19 @@ public class LoginController {
         } else MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Log In Error!",
                 "Email or password is not correct!");
 
+    }
+
+    public void handleSignup() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/socialnetwork/socialnetworkapp/views/signup-view.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) emailTextField.getScene().getWindow();
+        stage.setScene(scene);
+
+        SignupController controller = loader.getController();
+        controller.setService(service);
+
+        stage.show();
     }
 
     private void showUserProfile(User user) throws IOException {

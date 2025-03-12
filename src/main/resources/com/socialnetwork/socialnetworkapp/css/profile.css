@@ -1,113 +1,81 @@
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    padding: 0;
+/* General App Background */
+.root {
+    -fx-background-color: #f1f9f1; /* Very light green */
 }
 
-/* Style the main container */
-.anchor-pane {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 800px;
+/* HBox styling for the top navigation bar */
+.hbox {
+    -fx-background-color: #e6f7e6; /* Light mint green */
+    -fx-spacing: 10;
+    -fx-padding: 5 10;
+    -fx-alignment: center;
+    -fx-border-color: #d9f2d9;
+    -fx-border-width: 0 0 2 0;
 }
 
-/* Tabs at the top */
-.tab-pane .tab-header-area {
-    background-color: #2d88ff;
-    border-bottom: none;
+/* Button Styling */
+.button {
+    -fx-background-color: #ccf2cc; /* Mint green */
+    -fx-text-fill: #1b5e20; /* Darker green for better contrast */
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 12px;
+    -fx-padding: 8 16;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
 }
 
-.tab-pane .tab {
-    font-weight: bold;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 5px 5px 0 0;
-    background-color: #2d88ff;
+.button:hover {
+    -fx-background-color: #b8ebb8; /* Slightly darker mint green on hover */
 }
 
-.tab-pane .tab:hover {
-    background-color: #1c6ed7;
+/* Label Styling */
+.label {
+    -fx-text-fill: #2e7d32; /* Darker green text for better visibility */
+    -fx-font-size: 12px;
+    -fx-font-family: 'Arial', sans-serif;
 }
 
-/* Profile section */
-.user-profile {
-    text-align: center;
-    margin-bottom: 20px;
+.label#nameTextField {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1b5e20; /* Even darker green for the name */
 }
 
-.user-profile h1 {
-    font-size: 24px;
-    color: #333;
-    margin: 0;
+.label#emailTextField {
+    -fx-text-fill: #1b5e20; /* Darker text for email label */
 }
 
-.user-profile p {
-    font-size: 16px;
-    color: #666;
-    margin: 5px 0 15px;
+.label#currentPageLabel {
+    -fx-font-size: 12px;
+    -fx-text-fill: #3e3e3e; /* Neutral dark gray for pagination label */
 }
 
-/* Buttons */
-button {
-    background-color: #2d88ff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 14px;
+/* ListView Styling */
+.list-view {
+    -fx-background-color: #f8fcf8; /* Slightly lighter green background */
+    -fx-border-color: #d9f2d9;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+    -fx-control-inner-background: #f8fcf8;
+    -fx-text-fill: #1b5e20; /* Darker green text for list items */
 }
 
-button:hover {
-    background-color: #1c6ed7;
+/* Separator Styling */
+.separator {
+    -fx-background-color: #d9f2d9; /* Matches theme */
+    -fx-padding: 2 0;
 }
 
-
-/* Friends list */
-.friends-list {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    max-height: 300px;
-    overflow-y: auto;
-    background-color: #f9f9f9;
+/* VBox and Layout Container Styling */
+.vbox {
+    -fx-spacing: 10;
+    -fx-padding: 10;
 }
 
-.friends-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.friends-list li {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    align-items: center;
-}
-
-.friends-list li img {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
-
-.friends-list li span {
-    font-size: 14px;
-    color: #333;
-}
-
-/* Logout button */
-.logout-button {
-    background-color: #ff4d4d;
-}
-
-.logout-button:hover {
-    background-color: #e63939;
+/* Pagination Buttons */
+.button#previousButton, .button#nextButton {
+    -fx-font-size: 12px;
+    -fx-background-color: #e0f7e0; /* Slightly lighter mint */
+    -fx-text-fill: #2e7d32; /* Darker green for text */
 }

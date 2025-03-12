@@ -3,8 +3,11 @@ package com.socialnetwork.socialnetworkapp.controller;
 import com.socialnetwork.socialnetworkapp.domain.Friendship;
 import com.socialnetwork.socialnetworkapp.domain.User;
 import com.socialnetwork.socialnetworkapp.service.SocialNetworkService;
+import com.socialnetwork.socialnetworkapp.utils.dto.FriendshipFilterDTO;
 import com.socialnetwork.socialnetworkapp.utils.events.ObjectChangeEvent;
 import com.socialnetwork.socialnetworkapp.utils.observer.Observer;
+import com.socialnetwork.socialnetworkapp.utils.paging.Page;
+import com.socialnetwork.socialnetworkapp.utils.paging.Pageable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -35,8 +38,19 @@ public class UserProfileController implements Observer<ObjectChangeEvent> {
     @FXML
     Button requestsButton;
 
+    @FXML
+    Button previousButton;
+    @FXML
+    Button nextButton;
+    @FXML
+    Label currentPageLabel;
+
     private MenuBarController menuBarController;
     ObservableList<User> model = FXCollections.observableArrayList();
+
+    private int pageSize = 3;
+    private int currentPage = 0;
+    private int totalNumberOfElements = 0;
 
     private User user;
     private SocialNetworkService service;
@@ -55,23 +69,48 @@ public class UserProfileController implements Observer<ObjectChangeEvent> {
             requestsButton.setText("Requests" + "(" + menuBarController.getNotificationsCount() + ")");
         else requestsButton.setText("Requests");
 
+        nameTextField.setText(user.getFirstName() + " " + user.getLastName());
+        emailTextField.setText(user.getEmail());
+
         initModel();
     }
 
     private void initModel(){
-        nameTextField.setText(user.getFirstName() + " " + user.getLastName());
-        emailTextField.setText(user.getEmail());
+        FriendshipFilterDTO filter = new FriendshipFilterDTO();
+        filter.setUserId(Optional.of(user.getId()));
+        Page<Friendship> page = service.findAllOnPage(new Pageable(currentPage, pageSize), filter);
 
-        Iterable<User> users = service.getFriendsOfUser(user);
-        List<User> usersList = StreamSupport.stream(users.spliterator(), false).collect(Collectors.toList());
-        model.setAll(usersList);
+        int maxPage = (int) Math.ceil((double) page.getTotalNumberOfElements() / pageSize) - 1;
+        if(maxPage == -1){
+            maxPage = 0;
+        }
+        if(currentPage > maxPage){
+            currentPage = maxPage;
+            page = service.findAllOnPage(new Pageable(currentPage, pageSize), filter);
+        }
+
+        totalNumberOfElements = page.getTotalNumberOfElements();
+
+        previousButton.setDisable(currentPage == 0);
+        nextButton.setDisable((currentPage + 1) * pageSize >= totalNumberOfElements);
+
+        List<User> friendsList = StreamSupport.stream(page.getElementsOnPage().spliterator(), false)
+                .map(friendship -> {
+                    Optional<User> friend;
+                    if(friendship.getId().getFirst().equals(user.getId())){
+                        friend = service.getUserById(friendship.getId().getSecond());
+                    }
+                    else friend = service.getUserById(friendship.getId().getFirst());
+                    return friend.orElse(null);
+                })
+                .toList();
+
+        model.setAll(friendsList);
+        currentPageLabel.setText("Page " + (currentPage + 1) + " of " + (maxPage + 1));
     }
 
     @FXML
     public void initialize() {
-        nameTextField.setText("");
-        emailTextField.setText("");
-
 
         friendsListView.setCellFactory(param -> new ListCell<User>() {
             @Override
@@ -153,5 +192,15 @@ public class UserProfileController implements Observer<ObjectChangeEvent> {
 
     public void handleUpdate(ActionEvent event){
         //service.updateUser();
+    }
+
+    public void onNextPage(ActionEvent event) {
+        currentPage++;
+        initModel();
+    }
+
+    public void onPreviousPage(ActionEvent event) {
+        currentPage--;
+        initModel();
     }
 }

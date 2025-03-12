@@ -1,14 +1,24 @@
 package com.socialnetwork.socialnetworkapp.repository;
 
 import com.socialnetwork.socialnetworkapp.domain.*;
+import com.socialnetwork.socialnetworkapp.repository.database.FriendshipPagingRepository;
 
 public class DataManagerStructure {
     private final Repository<Long, User> userRepository;
-    private final Repository<Tuple<Long, Long>, Friendship> friendshipRepository;
+    //private final Repository<Tuple<Long, Long>, Friendship> friendshipRepository;
+    private final FriendshipRepository friendshipRepository;
     private final Repository<Tuple<Long, Long>, Request> requestRepository;
     private final Repository<Long, Message> messageRepository;
-
+/*
     public DataManagerStructure(Repository<Long, User> usersRepo, Repository<Tuple<Long,Long>, Friendship> friendshipRepo,
+                                Repository<Tuple<Long, Long>, Request> requestRepo, Repository<Long, Message> messageRepo) {
+        this.userRepository = usersRepo;
+        this.friendshipRepository = friendshipRepo;
+        this.requestRepository = requestRepo;
+        this.messageRepository = messageRepo;
+    }
+*/
+    public DataManagerStructure(Repository<Long, User> usersRepo, FriendshipRepository friendshipRepo,
                                 Repository<Tuple<Long, Long>, Request> requestRepo, Repository<Long, Message> messageRepo) {
         this.userRepository = usersRepo;
         this.friendshipRepository = friendshipRepo;
@@ -28,7 +38,7 @@ public class DataManagerStructure {
      *
      * @return the repository of friendships
      */
-    public Repository<Tuple<Long, Long>, Friendship> getFriendshipRepository(){
+    public FriendshipRepository getFriendshipRepository(){
         return this.friendshipRepository;
     }
 

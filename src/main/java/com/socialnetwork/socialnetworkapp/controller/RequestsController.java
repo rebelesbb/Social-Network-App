@@ -121,11 +121,6 @@ public class RequestsController implements Observer<ObjectChangeEvent> {
         requestTableView.setItems(model);
     }
 
-    @Override
-    public void update(ObjectChangeEvent event) {
-
-    }
-
     public void handleAccept(RequestDTO request) {
         service.addFriend(request.getSenderID(), request.getReceiverID());
         Optional<Request> r = service.getRequestById(request.getSenderID(), request.getReceiverID());
@@ -135,6 +130,7 @@ public class RequestsController implements Observer<ObjectChangeEvent> {
                     rec.getTimeSent());
         }
     }
+
 
     public void handleDecline(RequestDTO request) {
         Optional<Request> r = service.getRequestById(request.getSenderID(), request.getReceiverID());
@@ -171,5 +167,10 @@ public class RequestsController implements Observer<ObjectChangeEvent> {
 
     public void goToChats() throws IOException{
         menuBarController.goToChats();
+    }
+
+    @Override
+    public void update(ObjectChangeEvent event) {
+
     }
 }
