@@ -17,7 +17,7 @@
             <TextField fx:id="emailTextField" />
             <Separator prefHeight="9.0" prefWidth="222.0" visible="false" />
             <Label text="Password" />
-            <TextField fx:id="passwordTextField" />
+            <PasswordField fx:id="passwordTextField" />
             <Separator prefWidth="200.0" visible="false" />
             <AnchorPane prefHeight="39.0" prefWidth="204.0">
                <children>

@@ -21,6 +21,10 @@ public class MenuBarController {
         this.service = service;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Stage getStage() {
         return stage;
     }
@@ -98,4 +102,16 @@ public class MenuBarController {
         stage.show();
     }
 
+    public void goToUpdateProfile() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/socialnetwork/socialnetworkapp/views/update-view.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Scene scene = new Scene(root);
+        this.stage.setScene(scene);
+
+        UpdateProfileController controller = fxmlLoader.getController();
+        controller.setService(service, user, this);
+
+        stage.show();
+    }
 }

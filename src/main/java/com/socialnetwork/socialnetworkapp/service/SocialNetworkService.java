@@ -387,12 +387,13 @@ public class SocialNetworkService implements Observable<ObjectChangeEvent> {
 
     @Override
     public void addObserver(Observer<ObjectChangeEvent> observer) {
-        observers.add(observer);
+        if(!observers.contains(observer))
+            observers.add(observer);
     }
 
     @Override
     public void removeObserver(Observer<ObjectChangeEvent> observer) {
-        //obserbers.remove(observer)
+        observers.remove(observer);
     }
 
     @Override

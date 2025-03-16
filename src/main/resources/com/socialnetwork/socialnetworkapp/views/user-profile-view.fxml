@@ -37,8 +37,9 @@
                                     <Label fx:id="emailTextField" alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="84.0" prefWidth="220.0" text="email@domain.com" wrapText="true" />
                                  </children>
                               </VBox>
-                              <Button layoutX="11.0" layoutY="194.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="131.0" text="Edit Profile" />
+                              <Button layoutX="11.0" layoutY="194.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="26.0" prefWidth="131.0" text="Edit Profile" />
                               <Button layoutX="14.0" layoutY="314.0" mnemonicParsing="false" onAction="#handleLogout" text="Log Out" />
+                              <Button layoutX="11.0" layoutY="238.0" mnemonicParsing="false" onAction="#handleDelete" prefHeight="31.0" prefWidth="131.0" text="Delete Account" />
                            </children></AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="172.0">
                            <children>

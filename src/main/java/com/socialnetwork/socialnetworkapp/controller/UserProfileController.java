@@ -15,10 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -190,8 +187,21 @@ public class UserProfileController implements Observer<ObjectChangeEvent> {
         menuBarController.goToLogInMenu();
     }
 
-    public void handleUpdate(ActionEvent event){
-        //service.updateUser();
+    public void handleUpdate(ActionEvent event) throws IOException {
+        menuBarController.goToUpdateProfile();
+    }
+
+    public void handleDelete(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Are you sure you want to delete your account?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            service.deleteUser(user.getId());
+            menuBarController.goToLogInMenu();
+        }
     }
 
     public void onNextPage(ActionEvent event) {

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/profile.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.socialnetwork.socialnetworkapp.controller.UpdateProfileController">
+   <children>
+      <VBox layoutX="216.0" layoutY="94.0" prefHeight="224.0" prefWidth="168.0" AnchorPane.bottomAnchor="82.0" AnchorPane.leftAnchor="216.0" AnchorPane.rightAnchor="216.0" AnchorPane.topAnchor="94.0">
+         <children>
+            <Label text="First Name" />
+            <TextField fx:id="firstNameTextField" />
+            <Separator prefWidth="200.0" visible="false" />
+            <Label layoutX="10.0" layoutY="10.0" text="Last Name" />
+            <TextField fx:id="lastNameTextField" layoutX="10.0" layoutY="28.0" />
+            <Separator layoutX="10.0" layoutY="53.0" prefWidth="200.0" visible="false" />
+            <Label layoutX="10.0" layoutY="56.0" text="Email" />
+            <TextField fx:id="emailTextField" layoutX="10.0" layoutY="74.0" />
+            <Separator layoutX="10.0" layoutY="100.0" prefWidth="200.0" visible="false" />
+            <Label layoutX="10.0" layoutY="103.0" text="Password" />
+            <PasswordField fx:id="passwordField" />
+            <Separator layoutX="10.0" layoutY="146.0" prefHeight="12.0" prefWidth="168.0" visible="false" />
+            <Button mnemonicParsing="false" onAction="#handleUpdate" prefHeight="26.0" prefWidth="158.0" text="Update Profile" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets left="5.0" />
+               </VBox.margin>
+            </Button>
+         </children></VBox>
+      <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#backToProfile" text="Back" />
+   </children>
+</AnchorPane>
