@@ -34,7 +34,7 @@ This project is implementing a **basic social networking app** where users can:
 - **Version Control**: Git & GitHub
 
 ---
-
+<a name="features"><a/>
 ## ✨ Features
 
 ✔ User registration & login  
@@ -45,7 +45,7 @@ This project is implementing a **basic social networking app** where users can:
 ✔ JavaFX-based interactive UI  
 
 ---
-
+<a name="getting-started"><a/>
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -55,34 +55,36 @@ Ensure you have the following installed:
 - **Maven** (`mvn -version`)
 - **PostgreSQL** (`psql --version`)
 
+---
+<a name="usage"><a/>
 ## 💻 Usage
 
-##### When opening the app
+#### When opening the app
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/1.png)
-##### Create account
+#### Create account
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/2.png)
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/3.png)
-##### Log in
+#### Log in
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/4.png)
-##### User profile
+#### User profile
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/5.png)
-##### Update user data
+#### Update user data
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/6.png)
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/7.png)
-##### Search user and add friend
+#### Search user and add friend
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/9.png)
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/10.png)
-##### Accept/Decline friend request
+#### Accept/Decline friend request
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/11.png)
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/12.png)
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/13.png)
-##### Chat with friends
+#### Chat with friends
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/14.png)
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/15.png)
-##### Remove friend
+#### Remove friend
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/17.png)
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/18.png)
-##### Delete account
+#### Delete account
 ![](https://github.com/rebelesbb/Social-Network-App/blob/main/screenshots/16.png)
 
 ##### After deleting the account or logging out, the app takes the user back to the log in menu
